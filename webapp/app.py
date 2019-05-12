@@ -1,6 +1,9 @@
 from flask import Flask, render_template, redirect, request, url_for
 import web
 
+from redis import Redis
+import rq
+
 from . import config
 from .utils import process_row, save_file
 from .tasks import generate_thumbnail
@@ -8,6 +11,8 @@ from .tasks import generate_thumbnail
 app = Flask(__name__)
 
 db = web.database(config.DATABASE_URL)
+
+queue = rq.Queue('klickr', connection=Redis.from_url(config.REDIS_URL))
 
 @app.route('/')
 def index():
@@ -28,7 +33,7 @@ def upload():
         photo_id = db.insert('photo')
         save_file(photo, photo_id, 'original')
         for size in ['small', 'medium', 'large']:
-            generate_thumbnail(photo_id, size)
+            queue.enqueue('webapp.tasks.generate_thumbnail', photo_id, size)
         return redirect(url_for('index'))
 
     return render_template('upload.html')
