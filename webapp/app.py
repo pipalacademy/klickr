@@ -50,3 +50,12 @@ def photo(photo_id):
     photo = process_row(rows[0])
 
     return render_template('photo.html', photo=photo)
+
+def process_all():
+    """Function to process all the uploaded images.
+    """
+    rows = db.query('select * from photo order by id desc limit 50').list()
+    for row in rows:
+        photo_id = row.id
+        for size in ['small', 'medium', 'large']:
+            queue.enqueue('webapp.tasks.generate_thumbnail', photo_id, size)
