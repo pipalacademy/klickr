@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Klickr - Photo {{ photo["id"] }}</title>
+</head>
+<body>
+    <h1>Klickr</h1>
+    <p><a href='/'>Home</a></p>
+    <h2>Photo {{ photo["id"] }}</h2>
+    <a href='/photo/{{ photo["id"]-1 }}'>Previous</a>
+    <a href='/photo/{{ photo["id"]+1 }}'>Next</a>
+    <br/>
+    <p>Download</p>
+    <a href='{{ photo["small_url"] }}'>Small</a>
+    <a href='{{ photo["medium_url"] }}'>Medium</a>
+    <a href='{{ photo["large_url"] }}'>Large</a>
+    <br/>
+    <img src={{ photo["original_url"] }}></img>
+</body>
+</html>
