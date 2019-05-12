@@ -11,10 +11,10 @@
     <a href='/photo/{{ photo["id"]+1 }}'>Next</a>
     <br/>
     <p>Download</p>
-    <a href='{{ photo["small_url"] }}'>Small</a>
-    <a href='{{ photo["medium_url"] }}'>Medium</a>
-    <a href='{{ photo["large_url"] }}'>Large</a>
+    <a href='{{  url_for('static', filename=photo["small_url"]) }}'>Small</a>
+    <a href='{{  url_for('static', filename=photo["medium_url"]) }}'>Medium</a>
+    <a href='{{  url_for('static', filename=photo["large_url"]) }}'>Large</a>
     <br/>
-    <img src={{ photo["original_url"] }}></img>
+    <img src={{ url_for('static', filename=photo["original_url"]) }}></img>
 </body>
 </html>

@@ -1,14 +1,5 @@
-import boto3
-
+import pathlib
 from . import config
-
-s3 = boto3.client(
-    's3',
-    aws_access_key_id=config.AWS_ACCESS_KEY_ID,
-    aws_secret_access_key=config.AWS_SECRET_ACCESS_KEY,
-    region_name=config.AWS_DEFAULT_REGION,
-    endpoint_url=config.AWS_ENDPOINT_URL
-)
 
 def process_row(row):
     photo_id = row.id
@@ -17,18 +8,17 @@ def process_row(row):
     }
 
     for size in ['original', 'small', 'medium', 'large']:
-        data[f'{size}_url'] = get_signed_url(f'photos/{photo_id}/{size}.jpg')
+        data[f'{size}_url'] = f'photos/{photo_id}/{size}.jpg'
 
     return data
 
-def upload_file(file, photo_id, ftype):
-    print(locals())
-    s3.upload_fileobj(file, config.S3_BUCKET, f'photos/{photo_id}/{ftype}.jpg')
+def save_file(file, photo_id, image_type):
+    photo_folder = config.UPLOADS_FOLDER + f'/{photo_id}'
+    photo_folder = pathlib.Path(photo_folder)
 
-def get_signed_url(path, expires_in=300):
-    return s3.generate_presigned_url('get_object',
-        ExpiresIn=expires_in,
-        Params={
-            'Bucket': config.S3_BUCKET,
-            'Key': path
-        })
+    photo_folder.mkdir(exist_ok=True)
+
+    photo_path = photo_folder.joinpath(f'{image_type}.jpg')
+    with photo_path.open('wb') as f:
+        f.write(file.read())
+    # file.save(photo_path)

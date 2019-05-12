@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, request, url_for
 import web
 
 from . import config
-from .utils import process_row, upload_file
+from .utils import process_row, save_file
 
 app = Flask(__name__)
 
@@ -24,8 +24,8 @@ def upload():
         if pfname.split('.')[-1].lower() not in ['jpg', 'jpeg']:
             return render_template('upload.html')
 
-        photo_id = db.insert('photo', metadata='klickr')
-        upload_file(photo, photo_id, 'original')
+        photo_id = db.insert('photo')
+        save_file(photo, photo_id, 'original')
         return redirect(url_for('index'))
 
     return render_template('upload.html')
