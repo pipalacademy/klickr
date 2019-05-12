@@ -36,7 +36,7 @@ def upload():
             photo_id = db.insert('photo')
             save_file(photo, photo_id, 'original', ext=fileformat)
             for size in ['small', 'medium', 'large']:
-                queue.enqueue('webapp.tasks.generate_thumbnail', photo_id, size)
+                queue.enqueue('klickr.tasks.generate_thumbnail', photo_id, size)
         return redirect(url_for('index'))
 
     return render_template('upload.html')
@@ -58,4 +58,4 @@ def process_all():
     for row in rows:
         photo_id = row.id
         for size in ['small', 'medium', 'large']:
-            queue.enqueue('webapp.tasks.generate_thumbnail', photo_id, size)
+            queue.enqueue('klickr.tasks.generate_thumbnail', photo_id, size)

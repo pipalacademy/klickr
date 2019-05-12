@@ -1,4 +1,4 @@
-from webapp.app import app
+from klickr.app import app
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
