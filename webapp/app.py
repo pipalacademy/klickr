@@ -16,7 +16,7 @@ queue = rq.Queue('klickr', connection=Redis.from_url(config.REDIS_URL))
 
 @app.route('/')
 def index():
-    rows = db.query('select * from photo limit 50 order by id desc;').list()
+    rows = db.query('select * from photo order by id desc limit 50').list()
     photos = [process_row(row) for row in rows]
     return render_template('index.html', photos=photos)
 
