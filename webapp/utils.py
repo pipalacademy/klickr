@@ -21,4 +21,3 @@ def save_file(file, photo_id, image_type):
     photo_path = photo_folder.joinpath(f'{image_type}.jpg')
     with photo_path.open('wb') as f:
         f.write(file.read())
-    # file.save(photo_path)

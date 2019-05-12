@@ -3,6 +3,7 @@ import web
 
 from . import config
 from .utils import process_row, save_file
+from .tasks import generate_thumbnail
 
 app = Flask(__name__)
 
@@ -26,6 +27,8 @@ def upload():
 
         photo_id = db.insert('photo')
         save_file(photo, photo_id, 'original')
+        for size in ['small', 'medium', 'large']:
+            generate_thumbnail(photo_id, size)
         return redirect(url_for('index'))
 
     return render_template('upload.html')
