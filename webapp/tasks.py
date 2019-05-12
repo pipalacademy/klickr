@@ -1,5 +1,5 @@
 from PIL import Image
-
+import os
 from . import config
 
 SIZE_MAP = {
@@ -9,7 +9,7 @@ SIZE_MAP = {
 }
 
 def get_path(photo_id):
-    return config.UPLOADS_FOLDER.rstrip('/') + '/' + f'{photo_id}/original.jpg'
+    return os.path.join(config.UPLOADS_FOLDER, str(photo_id), 'original.jpg')
 
 def generate_thumbnail(photo_id, size):
     original_path = get_path(photo_id)

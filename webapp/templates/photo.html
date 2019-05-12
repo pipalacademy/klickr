@@ -1,20 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Klickr - Photo {{ photo["id"] }}</title>
-</head>
-<body>
-    <h1>Klickr</h1>
-    <p><a href='/'>Home</a></p>
+{% extends "base.html" %}
+{% block content %}
     <h2>Photo {{ photo["id"] }}</h2>
-    <a href='/photo/{{ photo["id"]-1 }}'>Previous</a>
-    <a href='/photo/{{ photo["id"]+1 }}'>Next</a>
-    <br/>
-    <p>Download</p>
-    <a href='{{  url_for('static', filename=photo["small_url"]) }}'>Small</a>
-    <a href='{{  url_for('static', filename=photo["medium_url"]) }}'>Medium</a>
-    <a href='{{  url_for('static', filename=photo["large_url"]) }}'>Large</a>
-    <br/>
-    <img src={{ url_for('static', filename=photo["original_url"]) }}></img>
-</body>
-</html>
+    <div class="float-left">
+        <div>
+            <a href='/photo/{{ photo["id"]-1 }}'>&larr; Previous</a>
+            <a class="float-right" href='/photo/{{ photo["id"]+1 }}'>Next &rarr;</a>
+        </div>
+        <img src={{ url_for('static', filename=photo["large_url"]) }}></img>
+        <div>
+            <a href='/photo/{{ photo["id"]-1 }}'>&larr; Previous</a>
+            <a class="float-right" href='/photo/{{ photo["id"]+1 }}'>Next &rarr;</a>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <br>
+    <div>
+    Download:
+    <a href='{{  url_for('static', filename=photo["small_url"]) }}'>small</a>
+    | <a href='{{  url_for('static', filename=photo["medium_url"]) }}'>medium</a>
+    | <a href='{{  url_for('static', filename=photo["large_url"]) }}'>large</a>
+    | <a href='{{  url_for('static', filename=photo["original_url"]) }}'>original</a>
+    </div>
+
+
+{% endblock %}

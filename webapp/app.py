@@ -26,14 +26,17 @@ def upload():
         photo = request.files.get('photo')
         pfname = photo.filename
         if pfname == '':
-            return render_template('upload.html')
-        # if pfname.split('.')[-1].lower() not in ['jpg', 'jpeg']:
-        #     return render_template('upload.html')
+            return render_template('upload.html', error="Please select a photo")
 
-        photo_id = db.insert('photo')
-        save_file(photo, photo_id, 'original')
-        for size in ['small', 'medium', 'large']:
-            queue.enqueue('webapp.tasks.generate_thumbnail', photo_id, size)
+        fileformat = pfname.split(".")[-1]
+        if fileformat not in ["jpg", "jpeg", "png"]:
+            return render_template("upload.html", error="Invalid file format")
+
+        with db.transaction():
+            photo_id = db.insert('photo')
+            save_file(photo, photo_id, 'original', ext=fileformat)
+            for size in ['small', 'medium', 'large']:
+                queue.enqueue('webapp.tasks.generate_thumbnail', photo_id, size)
         return redirect(url_for('index'))
 
     return render_template('upload.html')

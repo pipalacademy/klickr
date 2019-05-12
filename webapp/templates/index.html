@@ -3,7 +3,11 @@
     <h2>Photos</h2>
     {% if photos %}
         {% for photo in photos %}
-            <a href='/photo/{{ photo["id"] }}'><img src={{ url_for('static', filename=photo["original_url"]) }}></img></a><br/>
+            <a class="photo-link" href='/photo/{{ photo["id"] }}'>
+                <img
+                class="img-thumbnail"
+                src="{{ url_for('static', filename=photo['small_url']) }}"></img>
+            </a>
         {% endfor %}
     {% else %}
         <em>No photos to show</em>
