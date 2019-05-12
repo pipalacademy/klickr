@@ -27,8 +27,8 @@ def upload():
         pfname = photo.filename
         if pfname == '':
             return render_template('upload.html')
-        if pfname.split('.')[-1].lower() not in ['jpg', 'jpeg']:
-            return render_template('upload.html')
+        # if pfname.split('.')[-1].lower() not in ['jpg', 'jpeg']:
+        #     return render_template('upload.html')
 
         photo_id = db.insert('photo')
         save_file(photo, photo_id, 'original')
