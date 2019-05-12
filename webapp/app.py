@@ -29,3 +29,13 @@ def upload():
         return redirect(url_for('index'))
 
     return render_template('upload.html')
+
+@app.route('/photo/<int:photo_id>')
+def photo(photo_id):
+    rows = db.query('select * from photo where id=$id', vars={'id': photo_id}).list()
+    if not len(rows):
+        return render_template('404.html')
+
+    photo = process_row(rows[0])
+
+    return render_template('photo.html', photo=photo)
