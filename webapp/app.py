@@ -1,8 +1,8 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, url_for
 import web
 
 from . import config
-from .utils import process_row
+from .utils import process_row, upload_file
 
 app = Flask(__name__)
 
@@ -17,8 +17,11 @@ def index():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
-        # form = request.form
-        # do something
-        return redirect(url_for('upload'))
+        photo = request.files.get('photo')
+        pfname = photo.filename
+        photo_id = db.insert('photo', metadata='klickr')
+        print(photo_id)
+        upload_file(photo, photo_id, 'original')
+        return redirect(url_for('index'))
 
     return render_template('upload.html')

@@ -21,6 +21,10 @@ def process_row(row):
 
     return data
 
+def upload_file(file, photo_id, ftype):
+    print(locals())
+    s3.upload_fileobj(file, config.S3_BUCKET, f'photos/{photo_id}/{ftype}.jpg')
+
 def get_signed_url(path, expires_in=300):
     return s3.generate_presigned_url('get_object',
         ExpiresIn=expires_in,
