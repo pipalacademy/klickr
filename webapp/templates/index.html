@@ -1,18 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Klickr - Home</title>
-</head>
-<body>
-    <h1>Klickr</h1>
-    <p><a href='/upload'>Upload New Photo</a></p>
+{% extends "base.html" %}
+{% block content %}
     <h2>Photos</h2>
     {% if photos %}
-    {% for photo in photos %}
-    <a href='/photo/{{ photo["id"] }}'><img src={{ url_for('static', filename=photo["original_url"]) }}></img></a><br/>
-    {% endfor %}
+        {% for photo in photos %}
+            <a href='/photo/{{ photo["id"] }}'><img src={{ url_for('static', filename=photo["original_url"]) }}></img></a><br/>
+        {% endfor %}
     {% else %}
-    <em>No photos to show</em>
+        <em>No photos to show</em>
     {% endif %}
-</body>
-</html>
+{% endblock %}
