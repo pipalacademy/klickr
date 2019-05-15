@@ -1,0 +1,33 @@
+version: '3'
+services:
+  redis:
+    image: redis
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: klickr
+      POSTGRES_USER: pipal
+      POSTGRES_PASSWORD: vmware-docker
+    volumes:
+      - ./data/postgres:/var/lib/postgresql
+  worker:
+    build: .
+    command: ["./worker.sh"]
+    environment:
+      REDIS_URL: redis://redis
+    volumes:
+      - ./data/klickr:/app/klickr/static
+    depends_on:
+      - redis
+  klickr:
+    build: .
+    ports:
+     - "5000:5000"
+    environment:
+      DATABASE_URL: postgres://pipal:vmware-docker@db/klickr
+      REDIS_URL: redis://redis
+    volumes:
+      - ./data/klickr:/app/klickr/static
+    depends_on:
+      - db
+      - redis
