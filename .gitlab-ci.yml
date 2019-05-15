@@ -41,8 +41,8 @@ deploy_dev:
     CLUSTER_NAME: k8s-pipal
   script:
     - echo "setting kubernetes credentials..."
-    - kubectl config set-cluster $CLUSTER_NAME --server="CLUSTER_URL" --insecure-skip-tls-verify=true
-    - kubectl config set-credentials $CLUSTER_USER --token="CLUSTER_TOKEN"
+    - kubectl config set-cluster $CLUSTER_NAME --server=$CLUSTER_URL --insecure-skip-tls-verify=true
+    - kubectl config set-credentials $CLUSTER_USER --token=$CLUSTER_TOKEN
     - kubectl config set-context dev --cluster=$CLUSTER_NAME --user=$CLUSTER_USER --namespace=$DEV_NAMESPACE
     - kubectl config use-context dev
     - echo "Resetting deployments..."
