@@ -36,7 +36,7 @@ def save_file(file, photo_id, image_type, ext="jpg"):
         f.write(file.read())
 
     if config.STORAGE_TYPE == "s3":
-        get_s3_client().upload_file(photo_path, config.STORAGE_S3_BUCKET, f"{photo_id}/{image_type}.{ext}", ExtraArgs={'ACL': 'public-read'})
+        get_s3_client().upload_file(str(photo_path), config.STORAGE_S3_BUCKET, f"{photo_id}/{image_type}.{ext}", ExtraArgs={'ACL': 'public-read'})
 
     if ext != "jpg":
         new_path = photo_path.with_suffix(".jpg")
@@ -44,4 +44,4 @@ def save_file(file, photo_id, image_type, ext="jpg"):
         image.convert("RGB").save(new_path)
 
         if config.STORAGE_TYPE == "s3":
-            get_s3_client().upload_file(new_path, config.STORAGE_S3_BUCKET, f"{photo_id}/{image_type}.jpg", ExtraArgs={'ACL': 'public-read'})
+            get_s3_client().upload_file(str(new_path), config.STORAGE_S3_BUCKET, f"{photo_id}/{image_type}.jpg", ExtraArgs={'ACL': 'public-read'})
