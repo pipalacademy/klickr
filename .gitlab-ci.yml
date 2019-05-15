@@ -1,0 +1,74 @@
+stages:
+  - test
+  - build
+  - deploy
+
+variables:
+  APP_NAME: klickr
+  CLUSTER_USER: gitlab-ci
+
+test:
+  stage: test
+  image: alpine
+
+  script:
+    - ./runtests.sh
+
+build_dev:
+  image: docker:stable
+  services:
+    - docker:dind
+  stage: build
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    CONTAINER_IMAGE_TAG: palnabarun/$APP_NAME:latest
+  script:
+    - echo "Logging into docker..."
+    - docker login -u $REGISTRY_USERNAME -p $REGISTRY_PASSWORD
+    - echo "Building docker image..."
+    - docker build -t $CONTAINER_IMAGE_TAG .
+    - echo "Build Complete..."
+    - echo "Pushing to registry..."
+    - docker push $CONTAINER_IMAGE_TAG
+  only:
+    - master
+
+deploy_dev:
+  stage: deploy
+  image: palnabarun/deployer:1.11.0-node8
+  variables:
+    CLUSTER_NAME: k8s-pipal
+  script:
+    - echo "setting kubernetes credentials..."
+    - kubectl config set-cluster $CLUSTER_NAME --server="CLUSTER_URL" --insecure-skip-tls-verify=true
+    - kubectl config set-credentials $CLUSTER_USER --token="CLUSTER_TOKEN"
+    - kubectl config set-context dev --cluster=$CLUSTER_NAME --user=$CLUSTER_USER --namespace=$DEV_NAMESPACE
+    - kubectl config use-context dev
+    - echo "Resetting deployments..."
+    - kubectl -n $DEV_NAMESPACE patch deployment $APP_NAME -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"last-updated\":\"`date +'%s'`\"}}}}}"
+    - echo "Deployment Succesful"
+  environment:
+    name: dev
+  only:
+  - master
+
+build_release:
+  image: docker:stable
+  services:
+    - docker:dind
+  stage: build
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+    CONTAINER_IMAGE_TAG: palnabarun/$APP_NAME:$CI_COMMIT_TAG
+  script:
+    - echo "Logging into docker..."
+    - docker login -u $REGISTRY_USERNAME -p $REGISTRY_PASSWORD
+    - echo "Building docker image..."
+    - docker build -t $CONTAINER_IMAGE_TAG .
+    - echo "Build Complete..."
+    - echo "Pushing to registry..."
+    - docker push $CONTAINER_IMAGE_TAG
+  only:
+  - tags
