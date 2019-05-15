@@ -6,7 +6,7 @@
             <a class="photo-link" href='/photo/{{ photo["id"] }}'>
                 <img
                 class="img-thumbnail"
-                src="{{ url_for('static', filename=photo['small_url']) }}"></img>
+                src="{{ photo_url(photo.id, 'small') }}"></img>
             </a>
         {% endfor %}
     {% else %}

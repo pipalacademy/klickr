@@ -6,7 +6,7 @@
             <a href='/photo/{{ photo["id"]-1 }}'>&larr; Previous</a>
             <a class="float-right" href='/photo/{{ photo["id"]+1 }}'>Next &rarr;</a>
         </div>
-        <img src={{ url_for('static', filename=photo["large_url"]) }}></img>
+        <img src="{{ photo_url(photo.id, 'large') }}"></img>
         <div>
             <a href='/photo/{{ photo["id"]-1 }}'>&larr; Previous</a>
             <a class="float-right" href='/photo/{{ photo["id"]+1 }}'>Next &rarr;</a>
@@ -18,10 +18,10 @@
     <br>
     <div>
     Download:
-    <a href='{{  url_for('static', filename=photo["small_url"]) }}'>small</a>
-    | <a href='{{  url_for('static', filename=photo["medium_url"]) }}'>medium</a>
-    | <a href='{{  url_for('static', filename=photo["large_url"]) }}'>large</a>
-    | <a href='{{  url_for('static', filename=photo["original_url"]) }}'>original</a>
+    <a href="{{ photo_url(photo.id, 'small') }}">small</a>
+    | <a href="{{ photo_url(photo.id, 'medium') }}">medium</a>
+    | <a href="{{ photo_url(photo.id, 'large') }}">large</a>
+    | <a href="{{ photo_url(photo.id, 'original') }}">original</a>
     </div>
 
 

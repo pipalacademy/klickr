@@ -14,6 +14,18 @@ db = web.database(config.DATABASE_URL)
 
 queue = rq.Queue('klickr', connection=Redis.from_url(config.REDIS_URL))
 
+@app.context_processor
+def template_globals():
+    return {
+        "photo_url": photo_url
+    }
+
+def photo_url(photo_id, size):
+    if config.STORAGE_TYPE == "s3":
+        return config.STORAGE_BASE_URL + f"/{photo_id}/{size}.jpg"
+    else:
+        return url_for("static", filename=f"photos/{photo_id}/{size}.jpg")
+
 @app.route('/')
 def index():
     rows = db.query('select * from photo order by id desc limit 50').list()
