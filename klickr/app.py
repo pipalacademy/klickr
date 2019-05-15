@@ -1,3 +1,5 @@
+import logging
+
 from flask import Flask, render_template, redirect, request, url_for
 import web
 
@@ -7,6 +9,8 @@ import rq
 from . import config
 from .utils import process_row, save_file
 from .tasks import generate_thumbnail
+
+logger = logging.Logger('WEBAPP')
 
 app = Flask(__name__)
 
@@ -47,7 +51,9 @@ def upload():
         with db.transaction():
             photo_id = db.insert('photo')
             save_file(photo, photo_id, 'original', ext=fileformat)
+            logging.info('Uploading photo with ID {}'.format(photo_id))
             for size in ['small', 'medium', 'large']:
+                logging.info('Submitting task to worker queue. GENERATE_THUMBNIAIL {} {}'.format(photo_id, size))
                 queue.enqueue('klickr.tasks.generate_thumbnail', photo_id, size)
         return redirect(url_for('index'))
 
