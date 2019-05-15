@@ -25,7 +25,7 @@ def template_globals():
 
 def photo_url(photo_id, size):
     if config.STORAGE_TYPE == "s3":
-        return config.STORAGE_BASE_URL + f"/{photo_id}/{size}.jpg"
+        return config.STORAGE_S3_BASE_URL + f"/{photo_id}/{size}.jpg"
     else:
         return url_for("static", filename=f"photos/{photo_id}/{size}.jpg")
 
