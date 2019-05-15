@@ -1,6 +1,7 @@
 import pathlib
 from PIL import Image
 from . import config
+import boto3
 
 def process_row(row):
     photo_id = row.id

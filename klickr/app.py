@@ -8,7 +8,6 @@ import rq
 
 from . import config
 from .utils import process_row, save_file
-from .tasks import generate_thumbnail
 
 logger = logging.Logger('WEBAPP')
 

@@ -34,7 +34,7 @@ def generate_thumbnail_s3(photo_id, size):
     original_path = get_path(photo_id)
     thumb_path = original_path.replace('original', size)
 
-    s3.download_file(config.STORAGE_S3_BUCKET, f"{photo_id}/original.{jpg}", original_path)
+    s3.download_file(config.STORAGE_S3_BUCKET, f"{photo_id}/original.jpg", original_path)
     generate_thumbnail_disk(photo_id, size)
-    s3.upload_file(thumb_path, config.STORAGE_S3_BUCKET, f"{photo_id}/{size}.{jpg}", ExtraArgs={'ACL': 'public-read'})
+    s3.upload_file(thumb_path, config.STORAGE_S3_BUCKET, f"{photo_id}/{size}.jpg", ExtraArgs={'ACL': 'public-read'})
     logging.info('Thumbnail of size {} saved to S3 for photo {}'.format(size, photo_id))
