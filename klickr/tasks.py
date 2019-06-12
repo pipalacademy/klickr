@@ -1,6 +1,7 @@
 from PIL import Image
 import os
 import logging
+import pathlib
 from . import config
 from .utils import get_s3_client
 
@@ -33,6 +34,8 @@ def generate_thumbnail_s3(photo_id, size):
     s3 = get_s3_client()
     original_path = get_path(photo_id)
     thumb_path = original_path.replace('original', size)
+
+    pathlib.Path(original_path).parent.mkdir(parents=True, exist_ok=True)
 
     s3.download_file(config.STORAGE_S3_BUCKET, f"{photo_id}/original.jpg", original_path)
     generate_thumbnail_disk(photo_id, size)
