@@ -11,4 +11,4 @@ COPY . /app
 
 EXPOSE 5000
 
-CMD ["./entrypoint.sh"]
+CMD ["python", "run.py"]
