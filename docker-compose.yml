@@ -6,8 +6,8 @@ services:
     image: postgres
     environment:
       POSTGRES_DB: klickr
-      POSTGRES_USER: pipal
-      POSTGRES_PASSWORD: vmware-docker
+      POSTGRES_USER: klickr
+      POSTGRES_PASSWORD: klickr
     volumes:
       - ./data/postgres:/var/lib/postgresql
   worker:
@@ -24,7 +24,7 @@ services:
     ports:
      - "5000:5000"
     environment:
-      DATABASE_URL: postgres://pipal:vmware-docker@db/klickr
+      DATABASE_URL: postgres://klickr:klickr@db/klickr
       REDIS_URL: redis://redis
     volumes:
       - ./data/klickr:/app/klickr/static
