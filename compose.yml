@@ -27,7 +27,6 @@ services:
       REDIS_URL: redis://redis
     volumes:
       - ./data/klickr:/app/klickr/static
-      - .:/app
     depends_on:
       - db
       - redis
