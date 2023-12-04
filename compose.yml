@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: klickr
       POSTGRES_PASSWORD: klickr
     volumes:
-      - ./data/postgres:/var/lib/postgresql
+      - ./data/pgdata:/var/lib/postgresql/data
   worker:
     build: .
     command: ["./worker.sh"]
@@ -21,12 +21,13 @@ services:
   klickr:
     build: .
     ports:
-     - "5000:5000"
+     - "5005:5000"
     environment:
       DATABASE_URL: postgres://klickr:klickr@db/klickr
       REDIS_URL: redis://redis
     volumes:
       - ./data/klickr:/app/klickr/static
+      - .:/app
     depends_on:
       - db
       - redis
